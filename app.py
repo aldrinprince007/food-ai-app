@@ -45,7 +45,10 @@ if food_query:
 
         # ========== AI EXPLANATION ==========
         try:
-            client = OpenAI(api_key="YOUR_API_KEY_HERE")
+            import os
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
