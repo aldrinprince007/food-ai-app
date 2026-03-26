@@ -68,7 +68,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     else:
         st.error("No matching food found under your budget 😢")
-
+import os
+st.write("API Key Loaded:", os.getenv("OPENAI_API_KEY") is not None)
 # ========== FOOTER ==========
 st.write("---")
 st.caption("Made with ❤️ using AI")
