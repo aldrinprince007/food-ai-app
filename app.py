@@ -1,12 +1,11 @@
 import streamlit as st
 import os
 from openai import OpenAI
-
 # ================== PAGE SETUP ==================
 st.set_page_config(page_title="🍔 AI Food Finder", layout="centered")
 
-st.title("🍔 AI Food Deal Finder")
-st.write("Compare Swiggy, Zomato & Blinkit using AI 🚀")
+st.title("🍔 Smart Food Deal Finder")
+st.write("Find best food deals across Swiggy, Zomato & Blinkit 🚀")
 
 # ================== USER INPUT ==================
 food_query = st.text_input("What do you want to eat?")
@@ -28,13 +27,34 @@ food_data = [
     {"name": "Burger", "price": 110, "rating": 3.8, "app": "Zomato", "offer": "20% OFF"},
 ]
 
-# ================== FIND BEST OPTION ==================
+# ================== SMART LOGIC ==================
 def find_best_option(food_items):
     for item in food_items:
         item["score"] = item["rating"] + (budget - item["price"]) / 100
     return sorted(food_items, key=lambda x: x["score"], reverse=True)
 
-# ================== MAIN LOGIC ==================
+# ================== FAKE AI FUNCTION (FREE) ==================
+def smart_recommendation(best, food_query, budget):
+    reasons = []
+
+    # Price logic
+    if best["price"] < budget:
+        reasons.append("fits well within your budget 💰")
+
+    # Rating logic
+    if best["rating"] >= 4.2:
+        reasons.append("has excellent ratings ⭐")
+
+    # Offer logic
+    if "OFF" in best["offer"]:
+        reasons.append("gives a great discount 🎉")
+    elif "Free" in best["offer"]:
+        reasons.append("offers free delivery 🚚")
+
+    # Final message
+    return f"{best['app']} is the best choice for {food_query} because it {', '.join(reasons)}."
+
+# ================== MAIN ==================
 if food_query:
     filtered = []
 
@@ -55,30 +75,13 @@ if food_query:
 
         st.success(f"🏆 Best Option: {best['app']} - ₹{best['price']} ({best['offer']}) ⭐ {best['rating']}")
 
-        # ================== AI RECOMMENDATION ==================
-        try:
-            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": f"Why is {best['app']} the best choice for {food_query} under ₹{budget}?"
-                    }
-                ]
-            )
-
-            st.info("🧠 AI Recommendation:")
-            st.write(response.choices[0].message.content)
-
-        except Exception as e:
-            st.warning("⚠️ AI not working. Check API key.")
-            st.text(str(e))
+        # 🧠 FREE SMART RECOMMENDATION
+        st.info("🧠 Smart Recommendation:")
+        st.write(smart_recommendation(best, food_query, budget))
 
     else:
         st.error("No matching food found under your budget 😢")
 
 # ================== FOOTER ==================
 st.write("---")
-st.caption("Made with ❤️ using AI")
+st.caption("Made with ❤️ (No API needed)")
