@@ -63,8 +63,10 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             st.info("🧠 AI Recommendation:")
             st.write(response.choices[0].message.content)
 
-        except:
-            st.warning("Add your OpenAI API key to enable AI suggestions.")
+     
+        except Exception as e:
+    st.warning("⚠️ AI not working. Check API key or error.")
+    st.text(str(e))
 
     else:
         st.error("No matching food found under your budget 😢")
