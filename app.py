@@ -87,7 +87,7 @@ if st.button("🔍 Search"):
             with cols[i % 3]:
                 name = place.get("tags", {}).get("name", "Restaurant")
                 lat = place.get("lat") or place.get("center", {}).get("lat")
-		lon = place.get("lon") or place.get("center", {}).get("lon")
+				lon = place.get("lon") or place.get("center", {}).get("lon")
 
                 st.markdown('<div class="card">', unsafe_allow_html=True)
 
